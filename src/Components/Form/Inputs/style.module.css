@@ -1,0 +1,38 @@
+.inputContainer {
+    margin-bottom: 16px;
+    font-family: 'Arial', sans-serif;
+    position: relative;
+  }
+  
+  .inputLabel {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 8px;
+    display: block;
+    transition: all 0.3s ease;
+  }
+  
+  .inputField {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.3s ease;
+  }
+  
+  .inputField:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.2);
+  }
+  
+  .errorText {
+    color: red;
+    font-size: 12px;
+    position: absolute;
+    bottom: -18px;
+    left: 0;
+    margin-top: 4px;
+  }
+  
