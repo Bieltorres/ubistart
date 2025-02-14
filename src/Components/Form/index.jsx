@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useFormValidation } from "../../Hooks/useFormValidation";
 import { Input } from "./Inputs";
 import { SubmitButton } from "./SubmitButton";
+import s from "./style.module.css";
+import { InputCep } from "./Inputs/inputCep";
 
 export const Form = () => {
     const [formData, setFormData] = useState({
@@ -26,11 +28,12 @@ export const Form = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className={s.form}>
             <Input
                 label="Nome"
                 type="text"
                 name="name"
+                placeHolder={'Digite seu nome'}
                 value={formData.name}
                 onChange={handleChange}
                 error={errors.name}
@@ -39,14 +42,16 @@ export const Form = () => {
                 label="E-mail"
                 type="email"
                 name="email"
+                placeHolder={'Email@exemplo.com'}
                 value={formData.email}
                 onChange={handleChange}
                 error={errors.email}
             />
-            <Input
+            <InputCep
                 label="CEP"
                 type="text"
                 name="cep"
+                placeHolder={'Digite o cep'}
                 value={formData.cep}
                 onChange={handleChange}
                 error={errors.cep}

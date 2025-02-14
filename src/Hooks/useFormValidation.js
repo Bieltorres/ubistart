@@ -2,16 +2,38 @@ import { useState } from "react";
 import { validateName, validateEmail, validateCep } from "../Components/Form/validations";
 
 export const useFormValidation = () => {
-    const [errors, setErrors] = useState({});
-
+    const [errors, setErrors] = useState({
+      name: "",
+      email: "",
+      cep: "",
+    });
+  
     const validate = (name, value) => {
-        let error = "";
-        if (name === "name") error = validateName(value);
-        if (name === "email") error = validateEmail(value);
-        if (name === "cep") error = validateCep(value);
-
-        setErrors((prevErrors) => ({ ...prevErrors, [name]: error }));
+      const newErrors = { ...errors };
+  
+      if (name === "name" && value.trim() === "") {
+        newErrors.name = "Nome é obrigatório";
+      } else {
+        newErrors.name = "";
+      }
+  
+      if (name === "email" && !/\S+@\S+\.\S+/.test(value)) {
+        newErrors.email = "E-mail inválido";
+      } else {
+        newErrors.email = "";
+      }
+  
+      if (name === "cep") {
+        if (!/^\d{5}-\d{3}$/.test(value)) {
+          newErrors.cep = "CEP inválido";
+        } else {
+          newErrors.cep = "";
+        }
+      }
+  
+      setErrors(newErrors);
     };
-
+  
     return { errors, validate };
-};
+  };
+  

@@ -3,14 +3,18 @@ import { Form } from "../Components/Form/";
 import { List } from "../Components/List";
 import { Card } from "../Components/Card";
 import s from "./style.module.css";
+import { Title } from "../Components/Title";
+import { Text } from "../Components/Text";
+import { Img } from "../Components/Img";
 
 export const Home = () => {
     return (
         <div className={s.wrapper}>
+            <Img url="./logo-ubistart.png" alt="logo Ubistart" />
             <Card>
-                <h1>Cadastro</h1>
+                <Title text={'Formulário de cadastro'}/>
                 <Form />
-                <h2>Usuários Cadastrados</h2>
+                <List/>
             </Card>
             <List />
         </div>

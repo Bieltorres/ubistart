@@ -1,0 +1,45 @@
+.btnSubmit {
+    background-color: #15161A;
+    color: #fff;
+    border:1px solid #15161A;
+    min-height: 40px;
+    font-family: "Rubik", sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    font-style: normal;
+    line-height: 14px;
+    border-style: solid;
+    border-radius: 4px;
+    padding: 0px 050px 0px 050px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: .2s;
+    width: 10rem;
+}
+
+.btnSubmit:hover {
+    background: linear-gradient(160deg, rgb(99, 99, 99), rgb(29, 29, 29));
+    gap: 10px;
+}
+
+.btnIcon {
+    display: flex;
+    justify-content: center;
+}
+
+.icon {
+    fill: #fff !important;
+    height: 1em;
+}
+
+.disabledBtn {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.disabledBtn:hover {
+    gap: 5px;
+}
