@@ -1,9 +1,15 @@
 import { Injectable } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
+import { lastValueFrom } from 'rxjs';
 
 export interface User {
   name: string;
   email: string;
   cep: string;
+  state?: string;
+  city?: string;
+  neighborhood?: string;
+  street?: string;
 }
 
 export interface RegisterResponseSuccess {
@@ -21,7 +27,26 @@ export type RegisterResponse = RegisterResponseSuccess | RegisterResponseError;
 export class FormService {
   private users: User[] = [];
 
-  register(body: any): RegisterResponse {
+  constructor(private readonly httpService: HttpService) {}
+
+  async fetchCepData(cep: string): Promise<Partial<User> | null> {
+    try {
+      const response = await lastValueFrom(
+        this.httpService.get(`https://brasilapi.com.br/api/cep/v1/${cep}`)
+      );
+
+      if (response.status !== 200) {
+        return null;
+      }
+
+      const { state, city, neighborhood, street } = response.data;
+      return { state, city, neighborhood, street };
+    } catch (error) {
+      return null;
+    }
+  }
+
+  async register(body: Omit<User, 'state' | 'city' | 'neighborhood' | 'street'>): Promise<RegisterResponse> {
     const { name, email, cep } = body;
 
     if (!name || /\d/.test(name)) {
@@ -31,17 +56,22 @@ export class FormService {
       return { error: 'E-mail inválido' };
     }
     if (!cep || !/^\d{5}-\d{3}$/.test(cep)) {
-      return { error: 'CEP inválido' };
+      return { error: 'Formato de CEP inválido (use XXXXX-XXX)' };
     }
 
-    // Verifica se o usuário já existe pelo e-mail
+    const addressData = await this.fetchCepData(cep);
+    if (!addressData) {
+      return { error: 'CEP inválido ou não encontrado' };
+    }
+
     const existingUser = this.users.find((user) => user.email === email);
     if (existingUser) {
       return { error: 'Usuário com este e-mail já existe' };
     }
 
-    const newUser: User = { name, email, cep };
+    const newUser: User = { name, email, cep, ...addressData };
     this.users.push(newUser);
+
     return { message: 'Usuário cadastrado com sucesso', user: newUser };
   }
 
@@ -49,16 +79,28 @@ export class FormService {
     return this.users;
   }
 
-  updateUser(email: string, body: Partial<User>): RegisterResponse {
+  async updateUser(email: string, body: Partial<User>): Promise<RegisterResponse> {
     const userIndex = this.users.findIndex((user) => user.email === email);
-    
+
     if (userIndex === -1) {
       return { error: 'Usuário não encontrado' };
     }
 
-    // Atualiza apenas os campos fornecidos
-    this.users[userIndex] = { ...this.users[userIndex], ...body };
+    let updatedUser = { ...this.users[userIndex], ...body };
 
-    return { message: 'Usuário atualizado com sucesso', user: this.users[userIndex] };
-  }
+    if (body.cep && body.cep !== this.users[userIndex].cep) {
+      if (!/^\d{5}-\d{3}$/.test(body.cep)) {
+        return { error: 'Formato de CEP inválido (use XXXXX-XXX)' };
+      }
+      const addressData = await this.fetchCepData(body.cep);
+      if (!addressData) {
+        return { error: 'CEP inválido ou não encontrado' };
+      }
+      updatedUser = { ...updatedUser, ...addressData };
+    }
+
+    this.users[userIndex] = updatedUser;
+
+    return { message: 'Usuário atualizado com sucesso', user: updatedUser };
+}
 }

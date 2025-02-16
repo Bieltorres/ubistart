@@ -3,4 +3,13 @@
     cursor: pointer;
     font-family: 'rubik', sans-serif;
     color: #5E6067;
+    border: 1px solid #5e606717;
+    padding: 10px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    border-radius: 5px;
+    box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.08);
+
 }

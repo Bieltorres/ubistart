@@ -6,8 +6,8 @@ export class FormController {
   constructor(private readonly formService: FormService) {}
 
   @Post('register')
-  register(@Body() body: User): RegisterResponse {
-    return this.formService.register(body);
+  async register(@Body() body: User): Promise<RegisterResponse> { 
+    return await this.formService.register(body);
   }
 
   @Get('register')
@@ -15,8 +15,8 @@ export class FormController {
     return this.formService.getUsers();
   }
 
-  @Put('register/:email')
-  updateUser(@Param('email') email: string, @Body() body: Partial<User>): RegisterResponse {
-    return this.formService.updateUser(email, body);
+  @Put('update/:email')
+  async updateUser(@Param('email') email: string, @Body() body: Partial<User>): Promise<RegisterResponse> {  
+    return await this.formService.updateUser(email, body);
   }
 }

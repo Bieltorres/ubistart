@@ -35,7 +35,7 @@ export const Form = ({ showLoading, onUserAdded, editingUser, setEditingUser }) 
         try {
             const method = editingUser ? "PUT" : "POST";
             const url = editingUser
-                ? `http://localhost:3000/form/register/${editingUser.email}`
+                ? `http://localhost:3000/form/update/${editingUser.email}`
                 : 'http://localhost:3000/form/register';
 
             const response = await fetch(url, {

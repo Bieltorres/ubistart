@@ -1,14 +1,13 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { FormModule } from './form/form.module';
 import * as cors from 'cors';
-import { FormController } from './form/form.controller';
-import { FormService } from './form/form.service';
 
 @Module({
-  imports: [],
-  controllers: [FormController],
-  providers: [FormService],
+  imports: [FormModule],
+  controllers: [AppController], 
+  providers: [AppService], 
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
