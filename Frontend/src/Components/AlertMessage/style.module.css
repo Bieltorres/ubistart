@@ -1,0 +1,52 @@
+.alert {
+    position: fixed;
+    bottom: 20px;
+    right: -100%; /* Começa fora da tela */
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: opacity 1s ease-in-out;
+    animation: slideIn 0.8s forwards, fadeOut 1s 3.5s forwards;
+}
+
+.success {
+    background-color: #4caf50;
+}
+
+.error {
+    background-color: #f44336;
+}
+
+.alert i {
+    font-size: 20px;
+}
+
+/* Entrada mais suave */
+@keyframes slideIn {
+    from {
+        right: -100%;
+        opacity: 0;
+    }
+    to {
+        right: 20px;
+        opacity: 1;
+    }
+}
+
+/* Saída mais gradual */
+@keyframes fadeOut {
+    from {
+        right: 20px;
+        opacity: 1;
+    }
+    to {
+        right: -100%;
+        opacity: 0;
+    }
+}
