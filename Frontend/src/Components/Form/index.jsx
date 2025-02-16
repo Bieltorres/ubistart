@@ -10,10 +10,12 @@ export const Form = ({ showLoading, onUserAdded, editingUser, setEditingUser }) 
     const [formData, setFormData] = useState({ name: "", email: "", cep: "" });
     const { errors, validate } = useFormValidation();
     const [alert, setAlert] = useState({ show: false, type: "", message: "" });
+    const [isEditing, setIsEditing] = useState(false);
 
     useEffect(() => {
         if (editingUser) {
             setFormData(editingUser);
+            setIsEditing(false); 
         }
     }, [editingUser]);
 
@@ -21,6 +23,10 @@ export const Form = ({ showLoading, onUserAdded, editingUser, setEditingUser }) 
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
         validate(name, value);
+
+        if (editingUser && formData[name] !== value) {
+            setIsEditing(true);
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -49,6 +55,7 @@ export const Form = ({ showLoading, onUserAdded, editingUser, setEditingUser }) 
                 setAlert({ show: true, type: "success", message: editingUser ? "Usuário atualizado!" : "Cadastro realizado com sucesso!" });
                 onUserAdded();
                 setEditingUser(null);
+                setIsEditing(false);
             } else {
                 setAlert({ show: true, type: "error", message: "Erro ao salvar usuário" });
             }
@@ -62,14 +69,43 @@ export const Form = ({ showLoading, onUserAdded, editingUser, setEditingUser }) 
     return (
         <>
             <form onSubmit={handleSubmit} className={s.form}>
-                <Input label="Nome" type="text" name="name" placeHolder="Digite seu nome" value={formData.name} onChange={handleChange} error={errors.name} />
-                <Input label="E-mail" type="email" name="email" placeHolder="Email@exemplo.com" value={formData.email} onChange={handleChange} error={errors.email} disabled={!!editingUser} />
-                <InputCep label="CEP" type="text" name="cep" placeHolder="Digite o cep" value={formData.cep} onChange={handleChange} error={errors.cep} />
-                <SubmitButton onClick={handleSubmit} disabled={!formData.name || !formData.email || !formData.cep || Object.values(errors).some(err => err)} />
+                <Input
+                    label="Nome"
+                    type="text"
+                    name="name"
+                    placeHolder="Digite seu nome"
+                    value={formData.name}
+                    onChange={handleChange}
+                    error={errors.name}
+                    disabled={editingUser && !isEditing}
+                />
+                <Input
+                    label="E-mail"
+                    type="email"
+                    name="email"
+                    placeHolder="Email@exemplo.com"
+                    value={formData.email}
+                    onChange={handleChange}
+                    error={errors.email}
+                    disabled={true} 
+                />
+                <InputCep
+                    label="CEP"
+                    type="text"
+                    name="cep"
+                    placeHolder="Digite o cep"
+                    value={formData.cep}
+                    onChange={handleChange}
+                    error={errors.cep}
+                    disabled={editingUser && !isEditing}
+                />
+                <SubmitButton
+                    onClick={handleSubmit}
+                    disabled={!formData.name || !formData.email || !formData.cep || Object.values(errors).some(err => err) || !isEditing}
+                />
             </form>
 
             {alert.show && <AlertMessage type={alert.type} message={alert.message} onClose={() => setAlert({ ...alert, show: false })} />}
         </>
     );
 };
-
