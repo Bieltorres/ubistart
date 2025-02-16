@@ -31,7 +31,7 @@ Este projeto consiste em um **sistema de cadastro de usuários** utilizando **No
 
 ## **📸 Formulário de Cadastro**
 
-Aqui está um exemplo do formulário de cadastro de usuário:
+Formulário:
 
 ![Formulário de Cadastro](/Frontend/public/form.png)
 
@@ -43,50 +43,35 @@ Aqui está um exemplo do formulário de cadastro de usuário:
 
 1. Clone o repositório:
 
-```bash
-git clone <url-do-repositorio>
+```
+git clone <https://github.com/Bieltorres/ubistart>
 Navegue até a pasta do backend:
-bash
-Copiar
-Editar
+
 cd backend
+
 Instale as dependências:
-bash
-Copiar
-Editar
 npm install
+
 Inicie o servidor:
-bash
-Copiar
-Editar
 npm run start
+
 O servidor estará rodando em http://localhost:3000.
 
 Frontend
 Navegue até a pasta do frontend:
-bash
-Copiar
-Editar
+
 cd frontend
+
 Instale as dependências:
-bash
-Copiar
-Editar
 npm install
+
 Inicie o servidor:
-bash
-Copiar
-Editar
-npm start
+npm run dev
+
 O frontend estará acessível em http://localhost:5173.
 
 🧪 Testes
 O projeto contém testes para garantir a integridade das funcionalidades.
 
-Backend
-O backend utiliza NestJS para os testes. Para rodá-los, use o comando:
-
-bash
-Copiar
-Editar
+O Backend utiliza NestJS para os testes. Para rodá-los, use o comando:
 npm run test
