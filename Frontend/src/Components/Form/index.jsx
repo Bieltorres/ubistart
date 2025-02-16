@@ -30,35 +30,34 @@ export const Form = ({ showLoading, onUserAdded, editingUser, setEditingUser }) 
         }
     };
 
-const saveUser = async () => {
-    showLoading(true);
-    try {
-        const method = editingUser ? "PUT" : "POST";
-        const url = editingUser 
-            ? `http://localhost:3000/form/register/${editingUser.email}`
-            : 'http://localhost:3000/form/register';
+    const saveUser = async () => {
+        showLoading(true);
+        try {
+            const method = editingUser ? "PUT" : "POST";
+            const url = editingUser
+                ? `http://localhost:3000/form/register/${editingUser.email}`
+                : 'http://localhost:3000/form/register';
 
-        const response = await fetch(url, {
-            method,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData),
-        });
+            const response = await fetch(url, {
+                method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData),
+            });
 
-        if (response.ok) {
-            setFormData({ name: "", email: "", cep: "" });
-            setAlert({ show: true, type: "success", message: editingUser ? "Usuário atualizado!" : "Cadastro realizado com sucesso!" });
-            onUserAdded();
-            setEditingUser(null);
-        } else {
-            setAlert({ show: true, type: "error", message: "Erro ao salvar usuário" });
+            if (response.ok) {
+                setFormData({ name: "", email: "", cep: "" });
+                setAlert({ show: true, type: "success", message: editingUser ? "Usuário atualizado!" : "Cadastro realizado com sucesso!" });
+                onUserAdded();
+                setEditingUser(null);
+            } else {
+                setAlert({ show: true, type: "error", message: "Erro ao salvar usuário" });
+            }
+        } catch (error) {
+            setAlert({ show: true, type: "error", message: "Erro na comunicação com o servidor" });
+        } finally {
+            showLoading(false);
         }
-    } catch (error) {
-        setAlert({ show: true, type: "error", message: "Erro na comunicação com o servidor" });
-    } finally {
-        showLoading(false);
-    }
-};
-
+    };
 
     return (
         <>
@@ -66,7 +65,7 @@ const saveUser = async () => {
                 <Input label="Nome" type="text" name="name" placeHolder="Digite seu nome" value={formData.name} onChange={handleChange} error={errors.name} />
                 <Input label="E-mail" type="email" name="email" placeHolder="Email@exemplo.com" value={formData.email} onChange={handleChange} error={errors.email} disabled={!!editingUser} />
                 <InputCep label="CEP" type="text" name="cep" placeHolder="Digite o cep" value={formData.cep} onChange={handleChange} error={errors.cep} />
-                <SubmitButton onClick={handleSubmit} disabled={Object.values(errors).some(err => err)} />
+                <SubmitButton onClick={handleSubmit} disabled={!formData.name || !formData.email || !formData.cep || Object.values(errors).some(err => err)} />
             </form>
 
             {alert.show && <AlertMessage type={alert.type} message={alert.message} onClose={() => setAlert({ ...alert, show: false })} />}

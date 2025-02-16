@@ -1,3 +1,6 @@
 .itemList {
     margin-left: 10px;
+    cursor: pointer;
+    font-family: 'rubik', sans-serif;
+    color: #5E6067;
 }

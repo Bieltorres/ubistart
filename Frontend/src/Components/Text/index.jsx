@@ -1,3 +1,3 @@
 import s from "./style.module.css";
 
-export const Text = ({text}) => <p className={s.text}>{text}</p>
+export const Text = ({text}) => <h2 className={s.text}>{text}</h2>

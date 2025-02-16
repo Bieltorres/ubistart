@@ -1,4 +1,7 @@
 .listUsers {
     width: 100%;
-    list-style: none;
+    list-style: circle;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
