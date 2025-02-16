@@ -35,6 +35,7 @@ export const InputCep = ({ label, type, name, placeHolder, value, onChange, erro
         name={name}
         value={value}
         onChange={handleChange}
+        maxLength={9}
         className={`${s.inputField} ${error || (!isValid && isTouched) ? s.error : ""}`}
       />
       {error && <span className={s.errorText}>{error}</span>}

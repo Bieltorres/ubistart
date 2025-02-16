@@ -34,6 +34,8 @@ export class FormService {
       const response = await lastValueFrom(
         this.httpService.get(`https://brasilapi.com.br/api/cep/v1/${cep}`)
       );
+
+      console.log(response)
       
       if (response.status !== 200) {
         return null;
@@ -83,24 +85,39 @@ export class FormService {
     const userIndex = this.users.findIndex((user) => user.email === email);
 
     if (userIndex === -1) {
-      return { error: 'Usuário não encontrado' };
+        return { error: 'Usuário não encontrado' };
     }
 
-    let updatedUser = { ...this.users[userIndex], ...body };
+    if (body.email && body.email !== email) {
+        return { error: 'E-mail não pode ser alterado' };
+    }
+
+    if (body.name) {
+        if (/\d/.test(body.name)) {
+            return { error: 'Nome inválido' };
+        }
+        this.users[userIndex].name = body.name;
+    }
+
+    if (body.email && !/\S+@\S+\.\S+/.test(body.email)) {
+        return { error: 'E-mail inválido' };
+    }
 
     if (body.cep && body.cep !== this.users[userIndex].cep) {
-      if (!/^\d{5}-\d{3}$/.test(body.cep)) {
-        return { error: 'Formato de CEP inválido (use XXXXX-XXX)' };
-      }
-      const addressData = await this.fetchCepData(body.cep);
-      if (!addressData) {
-        return { error: 'CEP inválido ou não encontrado' };
-      }
-      updatedUser = { ...updatedUser, ...addressData };
+        if (!/^\d{5}-\d{3}$/.test(body.cep)) {
+            return { error: 'Formato de CEP inválido (use XXXXX-XXX)' };
+        }
+        const addressData = await this.fetchCepData(body.cep);
+        if (!addressData) {
+            return { error: 'CEP inválido ou não encontrado' };
+        }
+        body = { ...body, ...addressData };
     }
 
-    this.users[userIndex] = updatedUser;
+    this.users[userIndex] = { ...this.users[userIndex], ...body };
 
-    return { message: 'Usuário atualizado com sucesso', user: updatedUser };
-  }
+    return { message: 'Usuário atualizado com sucesso', user: this.users[userIndex] };
+}
+
+
 }

@@ -29,15 +29,20 @@ export const Form = ({ onUserAdded, editingUser, setEditingUser }) => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
+    
+        // Impedir números no campo de nome
+        if (name === "name" && !/^[A-Za-zÀ-ÖØ-öø-ÿ\s]*$/.test(value)) {
+            return;
+        }
+    
         setFormData({ ...formData, [name]: value });
         validate(name, value);
-
+    
         if (editingUser) {
             setIsEditing(true);
         }
     };
-
-    console.log(isEditing)
+    
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -91,7 +96,6 @@ export const Form = ({ onUserAdded, editingUser, setEditingUser }) => {
                     value={formData.name}
                     onChange={handleChange}
                     error={errors.name}
-                    disabled={editingUser && !isEditing}
                 />
                 <Input
                     label="E-mail"
@@ -101,7 +105,7 @@ export const Form = ({ onUserAdded, editingUser, setEditingUser }) => {
                     value={formData.email}
                     onChange={handleChange}
                     error={errors.email}
-                    disabled={true}
+                    disabled={editingUser ? true : false}
                 />
                 <InputCep
                     label="CEP"
@@ -111,7 +115,6 @@ export const Form = ({ onUserAdded, editingUser, setEditingUser }) => {
                     value={formData.cep}
                     onChange={handleChange}
                     error={errors.cep}
-                    disabled={editingUser && !isEditing}
                 />
                 <SubmitButton
                     onClick={handleSubmit}
