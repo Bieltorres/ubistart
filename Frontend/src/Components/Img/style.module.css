@@ -1,3 +1,9 @@
 .image {
     width: 20rem;
 }
+
+@media (max-width: 480px) {
+    .image {
+        width:15rem;
+    }
+}
