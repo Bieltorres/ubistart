@@ -44,7 +44,7 @@ Formulário:
 1. Clone o repositório:
 
 ```
-git clone <https://github.com/Bieltorres/ubistart>
+git clone https://github.com/Bieltorres/ubistart
 Navegue até a pasta do backend:
 
 cd backend
