@@ -33,7 +33,7 @@ Este projeto consiste em um **sistema de cadastro de usuários** utilizando **No
 
 Aqui está um exemplo do formulário de cadastro de usuário:
 
-![Formulário de Cadastro](https://link-da-imagem-aqui.com)
+![Formulário de Cadastro](/Frontend/public/form.png)
 
 ---
 
@@ -78,7 +78,7 @@ bash
 Copiar
 Editar
 npm start
-O frontend estará acessível em http://localhost:3001.
+O frontend estará acessível em http://localhost:5173.
 
 🧪 Testes
 O projeto contém testes para garantir a integridade das funcionalidades.
