@@ -44,6 +44,7 @@ export const Home = () => {
 
     return (
         <div className={s.wrapper}>
+            <div className={s.content}>
             <Img url="./logo-ubistart.png" alt="logo Ubistart" />
             <Card>
                 <Title text={'Formulário de cadastro'}/>
@@ -51,6 +52,7 @@ export const Home = () => {
                 <List users={users} setEditingUser={setEditingUser} />
             </Card>
             <List />
+            </div>
             {showLoading && (<Loading/>)}
         </div>
     );

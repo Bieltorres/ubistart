@@ -5,29 +5,39 @@ import { SubmitButton } from "./SubmitButton";
 import { InputCep } from "./Inputs/inputCep";
 import { AlertMessage } from "../AlertMessage";
 import s from "./style.module.css";
+import { Loading } from "../Loading";
 
-export const Form = ({ showLoading, onUserAdded, editingUser, setEditingUser }) => {
+export const Form = ({ onUserAdded, editingUser, setEditingUser }) => {
     const [formData, setFormData] = useState({ name: "", email: "", cep: "" });
     const { errors, validate } = useFormValidation();
     const [alert, setAlert] = useState({ show: false, type: "", message: "" });
     const [isEditing, setIsEditing] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (editingUser) {
             setFormData(editingUser);
-            setIsEditing(false); 
+            setIsEditing(false);
         }
     }, [editingUser]);
+
+    useEffect(() => {
+        if (editingUser) {
+            setIsEditing(JSON.stringify(formData) !== JSON.stringify(editingUser));
+        }
+    }, [formData, editingUser]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
         validate(name, value);
 
-        if (editingUser && formData[name] !== value) {
+        if (editingUser) {
             setIsEditing(true);
         }
     };
+
+    console.log(isEditing)
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -37,7 +47,7 @@ export const Form = ({ showLoading, onUserAdded, editingUser, setEditingUser }) 
     };
 
     const saveUser = async () => {
-        showLoading(true);
+        setLoading(true);
         try {
             const method = editingUser ? "PUT" : "POST";
             const url = editingUser
@@ -50,21 +60,25 @@ export const Form = ({ showLoading, onUserAdded, editingUser, setEditingUser }) 
                 body: JSON.stringify(formData),
             });
 
-            if (response.ok) {
-                setFormData({ name: "", email: "", cep: "" });
-                setAlert({ show: true, type: "success", message: editingUser ? "Usuário atualizado!" : "Cadastro realizado com sucesso!" });
-                onUserAdded();
-                setEditingUser(null);
-                setIsEditing(false);
-            } else {
-                setAlert({ show: true, type: "error", message: "Erro ao salvar usuário" });
+            const result = await response.json();
+
+            if (!response.ok || result.error) {
+                setAlert({ show: true, type: "error", message: result.error || "Erro ao salvar usuário" });
+                return;
             }
+
+            setFormData({ name: "", email: "", cep: "" });
+            setAlert({ show: true, type: "success", message: editingUser ? "Usuário atualizado!" : "Cadastro realizado com sucesso!" });
+            onUserAdded();
+            setEditingUser(null);
+
         } catch (error) {
             setAlert({ show: true, type: "error", message: "Erro na comunicação com o servidor" });
         } finally {
-            showLoading(false);
+            setLoading(false);
         }
     };
+
 
     return (
         <>
@@ -87,7 +101,7 @@ export const Form = ({ showLoading, onUserAdded, editingUser, setEditingUser }) 
                     value={formData.email}
                     onChange={handleChange}
                     error={errors.email}
-                    disabled={true} 
+                    disabled={true}
                 />
                 <InputCep
                     label="CEP"
@@ -101,11 +115,18 @@ export const Form = ({ showLoading, onUserAdded, editingUser, setEditingUser }) 
                 />
                 <SubmitButton
                     onClick={handleSubmit}
-                    disabled={!formData.name || !formData.email || !formData.cep || Object.values(errors).some(err => err) || !isEditing}
+                    disabled={
+                        !formData.name ||
+                        !formData.email ||
+                        !formData.cep ||
+                        Object.values(errors).some(err => err) ||
+                        (editingUser ? !isEditing : false)
+                    }
                 />
             </form>
 
             {alert.show && <AlertMessage type={alert.type} message={alert.message} onClose={() => setAlert({ ...alert, show: false })} />}
+            {loading && (<Loading />)}
         </>
     );
 };

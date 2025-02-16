@@ -1,11 +1,10 @@
 .alert {
     position: fixed;
     bottom: 20px;
-    right: -100%; /* Começa fora da tela */
+    right: -100%;
     padding: 12px 20px;
     border-radius: 8px;
     font-size: 16px;
-    font-weight: bold;
     color: #fff;
     display: flex;
     align-items: center;
@@ -13,6 +12,7 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     transition: opacity 1s ease-in-out;
     animation: slideIn 0.8s forwards, fadeOut 1s 3.5s forwards;
+    font-family: 'rubik';
 }
 
 .success {
@@ -27,7 +27,6 @@
     font-size: 20px;
 }
 
-/* Entrada mais suave */
 @keyframes slideIn {
     from {
         right: -100%;
@@ -39,7 +38,6 @@
     }
 }
 
-/* Saída mais gradual */
 @keyframes fadeOut {
     from {
         right: 20px;

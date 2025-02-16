@@ -9,8 +9,8 @@
   }
   
   .loadingImage {
-    width: 100px; 
-    height: 100px; 
+    width: 75px; 
+    height: 72px; 
     animation: rotate 2s linear infinite;
   }
   

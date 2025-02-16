@@ -27,14 +27,14 @@ export type RegisterResponse = RegisterResponseSuccess | RegisterResponseError;
 export class FormService {
   private users: User[] = [];
 
-  constructor(private readonly httpService: HttpService) {}
+  constructor(private readonly httpService: HttpService) { }
 
   async fetchCepData(cep: string): Promise<Partial<User> | null> {
     try {
       const response = await lastValueFrom(
         this.httpService.get(`https://brasilapi.com.br/api/cep/v1/${cep}`)
       );
-
+      
       if (response.status !== 200) {
         return null;
       }
@@ -60,7 +60,7 @@ export class FormService {
     }
 
     const addressData = await this.fetchCepData(cep);
-    if (!addressData) {
+    if (!addressData || !addressData.state || !addressData.city) {
       return { error: 'CEP inválido ou não encontrado' };
     }
 
@@ -102,5 +102,5 @@ export class FormService {
     this.users[userIndex] = updatedUser;
 
     return { message: 'Usuário atualizado com sucesso', user: updatedUser };
-}
+  }
 }
